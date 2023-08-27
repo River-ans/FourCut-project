@@ -6,8 +6,8 @@ const FourCutTheme = ({ imgs, theme = "pink" }) => {
   return (
     <div className={containerClasses.join(" ")}>
       {imgs && imgs.length > 0 ? (
-        imgs.map((image) => (
-          <div key={image.id} className={style.imgBox}>
+        imgs.map((image, index) => (
+          <div key={index} className={style.imgBox}>
             <img src={image.imgUrl} alt={`image-${image.id}`} />
           </div>
         ))

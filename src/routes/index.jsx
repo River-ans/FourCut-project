@@ -3,10 +3,10 @@ import style from "../styles/index.module.scss";
 import FourCutTheme from "../components/theme/fourCut-theme";
 
 const imgs = [
-  { id: 1, imgUrl: "../src/assets/img/1.png" },
-  { id: 2, imgUrl: "../src/assets/img/2.png" },
-  { id: 3, imgUrl: "../src/assets/img/3.png" },
-  { id: 4, imgUrl: "../src/assets/img/4.png" },
+  { imgUrl: "../src/assets/img/1.png" },
+  { imgUrl: "../src/assets/img/2.png" },
+  { imgUrl: "../src/assets/img/3.png" },
+  { imgUrl: "../src/assets/img/4.png" },
 ];
 
 const Index = () => {
