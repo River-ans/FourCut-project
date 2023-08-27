@@ -1,0 +1,50 @@
+.imgContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+
+    width: 220px;
+    border-radius: 2px;
+
+
+}
+.pink{
+    background-color: rgb(255, 103, 136);
+}
+
+.imgBox{
+    height: 120px;
+    overflow: hidden;
+    border-radius: 2px;
+}
+
+.imgBox>img{
+    width: 100%;
+}
+
+.imgContent{
+    display: flex;
+    justify-content: center;
+    font-size: 18px;
+    height: 100px;
+    color: white;
+    margin: 0px;
+}
+
+
+@media (max-width: 600px) {
+   
+    .imgContainer{
+        gap: 5px;
+        padding: 5px;
+        width: 150px;
+    }
+    .imgBox{
+        height: 85px;
+    }
+    .imgContent{
+        height: 75px;
+    }
+
+}
