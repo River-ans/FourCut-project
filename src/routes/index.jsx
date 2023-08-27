@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import style from "../styles/index.module.scss";
 import FourCutTheme from "../components/theme/fourCut-theme";
-import { RiGithubFill } from "react-icons/ri";
+
 const imgs = [
   { id: 1, imgUrl: "../src/assets/img/1.png" },
   { id: 2, imgUrl: "../src/assets/img/2.png" },
@@ -13,7 +13,7 @@ const Index = () => {
   return (
     <main className={style.main}>
       <div className={style.rotate}>
-        <FourCutTheme imgs={imgs} />
+        <FourCutTheme imgs={imgs} theme="pink" />
       </div>
       <div className={style.content}>
         <h1>
@@ -23,14 +23,6 @@ const Index = () => {
           시작
         </Link>
       </div>
-      <a
-        href="https://github.com/River-ans/FourCut-project"
-        className={style.githubLink}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <RiGithubFill className={style.github} /> River-ans
-      </a>
     </main>
   );
 };
