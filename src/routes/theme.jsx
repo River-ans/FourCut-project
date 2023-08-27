@@ -1,6 +1,7 @@
 import { Link, useLoaderData } from "react-router-dom";
 import FourCutTheme from "../components/theme/fourCut-theme";
 import style from "../styles/themePage.module.scss";
+
 import { getThemes } from "../constants/themeConfig";
 
 export function loader() {
@@ -10,6 +11,7 @@ export function loader() {
 
 const Theme = () => {
   const { themeColor } = useLoaderData();
+
   return (
     <main className={style.main}>
       <h2 className={style.title}>태마 선택</h2>

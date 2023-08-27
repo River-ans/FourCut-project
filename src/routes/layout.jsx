@@ -1,7 +1,9 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import style from "../styles/layout.module.scss";
-import { RiGithubFill } from "react-icons/ri";
+import { RiGithubFill, RiArrowLeftSLine } from "react-icons/ri";
 const Layout = () => {
+  const navigate = useNavigate();
+
   return (
     <div className={style.container}>
       <div className={style.box}>
@@ -14,6 +16,16 @@ const Layout = () => {
         >
           <RiGithubFill className={style.github} /> River-ans
         </a>
+        <button
+          type="button"
+          onClick={() => {
+            navigate(-1);
+          }}
+          className={style.redirectTo}
+        >
+          {" "}
+          <RiArrowLeftSLine />
+        </button>
       </div>
     </div>
   );

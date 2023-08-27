@@ -11,21 +11,28 @@
 
 }
 .pink{
-    background-color: rgb(255, 103, 136);
+    color: rgb(255, 138, 171);
+    border: 1px solid rgb(255, 138, 171);
+    background-color: rgb(255, 138, 171);
 }
 .blue{
-    background-color: rgb(103, 159, 255);
+    color: rgb(103, 159, 255);
+    border: 1px solid rgb(103, 159, 255);
+    background-color:rgb(103, 159, 255);
 }
 
 .imgBox{
-    height: 120px;
+    height: 110px;
     overflow: hidden;
     border-radius: 2px;
     background-color: rgba(255, 255, 255, 0.651);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .imgBox>img{
-    width: 100%;
+   width: 100%;
 }
 
 .imgContent{
@@ -46,7 +53,7 @@
         width: 150px;
     }
     .imgBox{
-        height: 85px;
+        height: 80px;
     }
     .imgContent{
         height: 75px;
