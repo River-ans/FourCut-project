@@ -1,8 +1,9 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { getTheme } from "../constants/themeConfig";
 import style from "../styles/photo.module.scss";
 import color from "../styles/theme.module.scss";
+import html2canvas from "html2canvas";
 import { RiCameraLine } from "react-icons/ri";
 import FourCutTheme from "../components/theme/fourCut-theme";
 
@@ -26,15 +27,16 @@ const Photo = () => {
   const [showCanvas, setShowCanvas] = useState(false); // 캔버스 표시 상태
   const [isDoneCapturing, setIsDoneCapturing] = useState(false);
   const timer = 2000;
-
+  const fourCutThemeRef = useRef(null);
   const [currentShot, setCurrentShot] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function startCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
-            width: { ideal: 4096 },
+            width: { ideal: 3840 },
             height: { ideal: 2160 },
           },
         });
@@ -99,6 +101,26 @@ const Photo = () => {
     setIsDoneCapturing(true);
   };
 
+  const downloadImage = async () => {
+    const element = fourCutThemeRef.current;
+
+    if (element) {
+      const canvas = await html2canvas(element);
+      const imgData = canvas.toDataURL("image/png");
+
+      const link = document.createElement("a");
+      link.href = imgData;
+      link.download = "four_cut_theme.png";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
+  async function action() {
+    return navigate("/");
+  }
+
   return (
     <>
       {!isDoneCapturing ? (
@@ -120,13 +142,23 @@ const Photo = () => {
 
           <button
             onClick={capturePhotos}
-            className={`${style.photoBtn} ${color[theme]}`}
+            className={`${color[theme]} ${style.photoBtn} `}
           >
             <RiCameraLine />
           </button>
         </div>
       ) : (
-        <FourCutTheme imgs={imgs} theme={theme} />
+        <div className={style.container}>
+          <div ref={fourCutThemeRef}>
+            <FourCutTheme imgs={imgs} theme={theme} />
+          </div>
+          <button type="button" className={style.btn} onClick={downloadImage}>
+            다운로드
+          </button>
+          <button type="button" className={style.btn} onClick={action}>
+            다시찍기
+          </button>
+        </div>
       )}
     </>
   );
