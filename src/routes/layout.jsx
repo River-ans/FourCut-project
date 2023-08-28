@@ -1,6 +1,7 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import style from "../styles/layout.module.scss";
 import { RiGithubFill, RiArrowLeftSLine } from "react-icons/ri";
+
 const Layout = () => {
   const navigate = useNavigate();
 
