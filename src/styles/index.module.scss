@@ -1,0 +1,53 @@
+
+
+.main{
+    display: flex;
+  align-items: center; 
+  gap: 100px; 
+
+}
+.rotate{
+    transform: rotate(-3deg);
+}
+.content>h1{
+    font-size: 25px;
+    font-weight: 400;
+    margin-bottom: 40px;
+}
+
+.content>h1>span{
+    font-size: 1.5em;
+    color: rgb(255, 103, 136);
+    font-weight: 800;
+}
+
+.Btn{
+
+    text-decoration: none;
+    padding: 10px 60px;
+    border-radius: 20px;
+    color: white;   
+    background-color:rgb(255, 103, 136) ;
+    transition: 0.2s;
+}
+
+.Btn:hover{
+    opacity: 0.8;
+}
+
+
+
+@media (max-width: 600px) {
+
+    .main{
+    gap: 40px;
+    }
+    .content>h1{
+        font-size: 16px;
+    }
+    .Btn{
+        padding: 5px 30px;
+        font-size: 14px;
+    }
+ 
+}
