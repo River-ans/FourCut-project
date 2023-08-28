@@ -50,6 +50,7 @@ const Photo = () => {
         }
       } catch (err) {
         console.error("카메라를 실행할 수 없습니다:", err);
+        alert("카메라 권한이 필요합니다.");
       }
     }
 
