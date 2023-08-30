@@ -24,7 +24,6 @@ const Layout = () => {
           }}
           className={style.redirectTo}
         >
-          {" "}
           <RiArrowLeftSLine />
         </button>
       </div>

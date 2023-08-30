@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { getTheme } from "../constants/themeConfig";
 import style from "../styles/photo.module.scss";
@@ -22,8 +22,7 @@ const Photo = () => {
   const canvasRef = useRef(null);
   const [imgs, setImgs] = useState([]);
   const [countdown, setCountdown] = useState(null);
-  const [canvasWidth, setCanvasWidth] = useState(1920); // 기본값
-  const [canvasHeight, setCanvasHeight] = useState(1080); // 기본값
+
   const [showCanvas, setShowCanvas] = useState(false); // 캔버스 표시 상태
   const [isDoneCapturing, setIsDoneCapturing] = useState(false);
   const timer = 2000;
@@ -36,19 +35,26 @@ const Photo = () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
-            width: { ideal: 3840 },
-            height: { ideal: 2160 },
+            width: { ideal: 9999 }, // 이런 식으로 아주 큰 수를 넣어
+            height: { ideal: 9999 }, // 최대한 높은 해상도를 얻을 수 있도록 해볼 수 있어
           },
         });
+
+        // 권한이 부여되면 이 부분이 실행됨
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
-          const videoTrack = videoRef.current.srcObject.getVideoTracks()[0];
-          const settings = videoTrack.getSettings();
-          // 캔버스 크기 설정
-          setCanvasWidth(settings.width);
-          setCanvasHeight(settings.height);
+
+          const videoTrack = stream.getVideoTracks()[0];
+          const trackSettings = videoTrack.getSettings();
+
+          const actualWidth = trackSettings.width;
+          const actualHeight = trackSettings.height;
+
+          canvasRef.current.width = actualWidth;
+          canvasRef.current.height = actualHeight;
         }
       } catch (err) {
+        // 권한이 거부되면 이 부분이 실행됨
         console.error("카메라를 실행할 수 없습니다:", err);
         alert("카메라 권한이 필요합니다.");
       }
@@ -59,8 +65,9 @@ const Photo = () => {
 
   const capturePhotos = async () => {
     let capturedImgs = [];
-    const canvas = canvasRef.current;
     const video = videoRef.current;
+    const canvas = canvasRef.current;
+
     const context = canvas.getContext("2d");
 
     for (let j = 0; j < 4; j++) {
@@ -75,14 +82,11 @@ const Photo = () => {
           setShowCanvas(true);
 
           context.save();
-          context.scale(-1, 1);
-          context.drawImage(
-            video,
-            -canvas.width,
-            0,
-            canvas.width,
-            canvas.height
-          );
+          context.translate(canvas.width, 0); // x축으로 이동
+          context.scale(-1, 1); // x축을 뒤집음
+
+          context.drawImage(video, 0, 0);
+
           context.restore();
 
           capturedImgs.push({ imgUrl: canvas.toDataURL("image/png") });
@@ -129,11 +133,15 @@ const Photo = () => {
           <h2 className={style.title}>사진</h2>
           <div className={style.currentShot}>{currentShot}/4</div>
           <div className={style.videoBox}>
-            <video ref={videoRef} autoPlay className={style.video}></video>
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              muted
+              className={style.video}
+            ></video>
             {countdown && <div className={style.countdown}>{countdown}</div>}
             <canvas
-              width={canvasWidth}
-              height={canvasHeight}
               ref={canvasRef}
               className={
                 showCanvas ? style.canvas : `${style.canvas} ${style.hidden}`
