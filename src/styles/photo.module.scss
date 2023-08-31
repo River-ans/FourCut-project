@@ -39,19 +39,17 @@
 .videoBox{
     position: relative;
     display: flex;
-   
-
+    align-items: center;
+    justify-content: center;
+   overflow: hidden;
+   aspect-ratio: 16 / 9;
     width: 100%;
-   
-    
+ 
 }
 
 .video{ 
     transform: scaleX(-1);
     width: 100%;  /* 부모 컨테이너에 꽉 차게 설정 */
-    aspect-ratio: 16 / 5;
-    object-fit: cover;  /* 비디오가 컨테이너에 꽉 차도록 하되, 비율은 유지 */
-    overflow: hidden;  /* 초과하는 부분은 숨김 */
 }
 
 
@@ -59,6 +57,7 @@
 // 찰칵 애니메이션을 위한 CSS
 .flash {
   animation: flash 0.2s ;
+  outline: 10px solid #f2378b;
 }
 
 @keyframes flash {
@@ -87,8 +86,7 @@
 .canvas{
     background-color: rgba(0, 0, 0, 0.346);
     width: 100%;  /* 부모 컨테이너에 꽉 차게 설정 */
-    object-fit: cover;  /* 비디오가 컨테이너에 꽉 차도록 하되, 비율은 유지 */
-    overflow: hidden;  /* 초과하는 부분은 숨김 */
+    height: 100%;
    position: absolute;
    top: 50%;
     left: 50%;
