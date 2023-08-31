@@ -18,6 +18,7 @@ export function loader({ params }) {
 
 const Photo = () => {
   const { theme } = useLoaderData();
+
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [imgs, setImgs] = useState([]);
@@ -25,7 +26,7 @@ const Photo = () => {
 
   const [showCanvas, setShowCanvas] = useState(false); // 캔버스 표시 상태
   const [isDoneCapturing, setIsDoneCapturing] = useState(false);
-  const timer = 2000;
+  const timer = 1000;
   const fourCutThemeRef = useRef(null);
   const [currentShot, setCurrentShot] = useState(0);
   const navigate = useNavigate();
@@ -35,23 +36,14 @@ const Photo = () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
-            width: { ideal: 9999 }, // 이런 식으로 아주 큰 수를 넣어
-            height: { ideal: 9999 }, // 최대한 높은 해상도를 얻을 수 있도록 해볼 수 있어
+            width: { ideal: 1920 }, // 이런 식으로 아주 큰 수를 넣어
+            height: { ideal: 1080 }, // 최대한 높은 해상도를 얻을 수 있도록 해볼 수 있어
           },
         });
 
         // 권한이 부여되면 이 부분이 실행됨
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
-
-          const videoTrack = stream.getVideoTracks()[0];
-          const trackSettings = videoTrack.getSettings();
-
-          const actualWidth = trackSettings.width;
-          const actualHeight = trackSettings.height;
-
-          canvasRef.current.width = actualWidth;
-          canvasRef.current.height = actualHeight;
         }
       } catch (err) {
         // 권한이 거부되면 이 부분이 실행됨
@@ -65,14 +57,14 @@ const Photo = () => {
 
   const capturePhotos = async () => {
     let capturedImgs = [];
-    const video = videoRef.current;
     const canvas = canvasRef.current;
-
+    const videoBoxElement = document.querySelector(`.${style.videoBox}`);
     const context = canvas.getContext("2d");
+    context.canvas.willReadFrequently = true;
 
     for (let j = 0; j < 4; j++) {
       setCurrentShot(capturedImgs.length);
-      for (let i = 3; i >= 0; i--) {
+      for (let i = 1; i >= 0; i--) {
         setCountdown(i > 0 ? i : "");
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -81,11 +73,15 @@ const Photo = () => {
           await new Promise((resolve) => setTimeout(resolve, 200));
           setShowCanvas(true);
 
+          const img = await html2canvas(videoBoxElement);
+          canvas.width = videoBoxElement.offsetWidth;
+          canvas.height = videoBoxElement.offsetHeight;
+
           context.save();
           context.translate(canvas.width, 0); // x축으로 이동
           context.scale(-1, 1); // x축을 뒤집음
 
-          context.drawImage(video, 0, 0);
+          context.drawImage(img, 0, 0, canvas.width, canvas.height);
 
           context.restore();
 
@@ -143,6 +139,8 @@ const Photo = () => {
             {countdown && <div className={style.countdown}>{countdown}</div>}
             <canvas
               ref={canvasRef}
+              width={1920}
+              height={1080}
               className={
                 showCanvas ? style.canvas : `${style.canvas} ${style.hidden}`
               }
