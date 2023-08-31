@@ -23,10 +23,9 @@ const Photo = () => {
   const canvasRef = useRef(null);
   const [imgs, setImgs] = useState([]);
   const [countdown, setCountdown] = useState(null);
-
   const [showCanvas, setShowCanvas] = useState(false); // 캔버스 표시 상태
   const [isDoneCapturing, setIsDoneCapturing] = useState(false);
-  const timer = 1000;
+  const timer = 1500;
   const fourCutThemeRef = useRef(null);
   const [currentShot, setCurrentShot] = useState(0);
   const navigate = useNavigate();
@@ -36,14 +35,22 @@ const Photo = () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
-            width: { ideal: 1920 }, // 이런 식으로 아주 큰 수를 넣어
-            height: { ideal: 1080 }, // 최대한 높은 해상도를 얻을 수 있도록 해볼 수 있어
+            width: { ideal: 9999 },
+            height: { ideal: 9999 },
           },
         });
 
-        // 권한이 부여되면 이 부분이 실행됨
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
+
+          const videoTrack = stream.getVideoTracks()[0];
+          const trackSettings = videoTrack.getSettings();
+
+          const actualWidth = trackSettings.width;
+          const actualHeight = trackSettings.height;
+
+          canvasRef.current.width = actualWidth;
+          canvasRef.current.height = actualHeight;
         }
       } catch (err) {
         // 권한이 거부되면 이 부분이 실행됨
@@ -57,6 +64,7 @@ const Photo = () => {
 
   const capturePhotos = async () => {
     let capturedImgs = [];
+
     const canvas = canvasRef.current;
     const videoBoxElement = document.querySelector(`.${style.videoBox}`);
     const context = canvas.getContext("2d");
@@ -64,18 +72,15 @@ const Photo = () => {
 
     for (let j = 0; j < 4; j++) {
       setCurrentShot(capturedImgs.length);
-      for (let i = 1; i >= 0; i--) {
+      for (let i = 3; i >= 0; i--) {
         setCountdown(i > 0 ? i : "");
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
         if (i === 0) {
-          videoRef.current.classList.add(style.flash);
+          videoBoxElement.classList.add(style.flash);
           await new Promise((resolve) => setTimeout(resolve, 200));
-          setShowCanvas(true);
 
           const img = await html2canvas(videoBoxElement);
-          canvas.width = videoBoxElement.offsetWidth;
-          canvas.height = videoBoxElement.offsetHeight;
 
           context.save();
           context.translate(canvas.width, 0); // x축으로 이동
@@ -84,13 +89,10 @@ const Photo = () => {
           context.drawImage(img, 0, 0, canvas.width, canvas.height);
 
           context.restore();
-
+          setShowCanvas(true);
           capturedImgs.push({ imgUrl: canvas.toDataURL("image/png") });
 
-          setTimeout(
-            () => videoRef.current.classList.remove(style.flash),
-            1000
-          );
+          setTimeout(() => videoBoxElement.classList.remove(style.flash), 1000);
           setTimeout(() => setShowCanvas(false), timer);
         }
       }
