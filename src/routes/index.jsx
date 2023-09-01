@@ -21,7 +21,7 @@ const Index = () => {
       </div>
       <div className={style.content}>
         <h1>
-          <span>집에서도</span> <br /> 4컷을 찍어보세요
+          <span>집에서도</span> <br /> 네컷을 찍어보세요
         </h1>
         <Link to="theme" className={style.Btn}>
           시작
