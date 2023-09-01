@@ -13,17 +13,21 @@ import Layout from "./routes/layout";
 import Index from "./routes";
 import Theme, { loader as themesLoader } from "./routes/theme";
 import Photo, { loader as themeLoader } from "./routes/photo";
+import ErrorPage from "./routes/errorPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<Layout />}>
+    <Route path="/" element={<Layout />} errorElement={<ErrorPage />}>
       <Route index element={<Index />}></Route>
-      <Route path="theme" element={<Theme />} loader={themesLoader}></Route>
-      <Route
-        path="theme/:themeId"
-        element={<Photo />}
-        loader={themeLoader}
-      ></Route>
+      <Route errorElement={<ErrorPage />}>
+        <Route path="theme" element={<Theme />} loader={themesLoader}></Route>
+
+        <Route
+          path="theme/:themeId"
+          element={<Photo />}
+          loader={themeLoader}
+        ></Route>
+      </Route>
     </Route>
   )
 );

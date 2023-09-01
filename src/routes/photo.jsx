@@ -31,44 +31,44 @@ const Photo = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function startCamera() {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            width: { ideal: 9999 },
-            height: { ideal: 9999 },
-          },
-        });
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+      throw new Error(`현재 모바일은 카메라는 아직 지원되지 않습니다.`);
+    } else {
+      async function startCamera() {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              width: { ideal: 9999 },
+              height: { ideal: 9999 },
+            },
+          });
 
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
+          if (videoRef.current) {
+            videoRef.current.srcObject = stream;
 
-          const videoTrack = stream.getVideoTracks()[0];
-          const trackSettings = videoTrack.getSettings();
+            const videoTrack = stream.getVideoTracks()[0];
+            const trackSettings = videoTrack.getSettings();
 
-          const actualWidth = trackSettings.width;
-          const actualHeight = trackSettings.height;
+            const actualWidth = trackSettings.width;
+            const actualHeight = trackSettings.height;
 
-          canvasRef.current.width = actualWidth;
-          canvasRef.current.height = actualHeight;
+            canvasRef.current.width = actualWidth;
+            canvasRef.current.height = actualHeight;
+          }
+        } catch (err) {
+          // 권한이 거부되면 이 부분이 실행됨
+          console.error("카메라를 실행할 수 없습니다:", err);
+          alert("카메라 권한이 필요합니다.");
         }
-      } catch (err) {
-        // 권한이 거부되면 이 부분이 실행됨
-        console.error("카메라를 실행할 수 없습니다:", err);
-        alert("카메라 권한이 필요합니다.");
       }
-    }
 
-    startCamera();
+      startCamera();
+    }
   }, []);
 
   const capturePhotos = async () => {
     let capturedImgs = [];
-
-    const canvas = canvasRef.current;
-    const videoBoxElement = document.querySelector(`.${style.videoBox}`);
-    const context = canvas.getContext("2d");
-    context.canvas.willReadFrequently = true;
 
     for (let j = 0; j < 4; j++) {
       setCurrentShot(capturedImgs.length);
@@ -77,6 +77,11 @@ const Photo = () => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
         if (i === 0) {
+          const canvas = canvasRef.current;
+          const videoBoxElement = document.querySelector(`.${style.videoBox}`);
+          const context = canvas.getContext("2d");
+          context.canvas.willReadFrequently = true;
+
           videoBoxElement.classList.add(style.flash);
           await new Promise((resolve) => setTimeout(resolve, 200));
 
@@ -85,9 +90,7 @@ const Photo = () => {
           context.save();
           context.translate(canvas.width, 0); // x축으로 이동
           context.scale(-1, 1); // x축을 뒤집음
-
           context.drawImage(img, 0, 0, canvas.width, canvas.height);
-
           context.restore();
           setShowCanvas(true);
           capturedImgs.push({ imgUrl: canvas.toDataURL("image/png") });
@@ -108,7 +111,9 @@ const Photo = () => {
     const element = fourCutThemeRef.current;
 
     if (element) {
-      const canvas = await html2canvas(element);
+      const canvas = await html2canvas(element, {
+        scale: 2,
+      });
       const imgData = canvas.toDataURL("image/png");
 
       const link = document.createElement("a");
@@ -141,8 +146,6 @@ const Photo = () => {
             {countdown && <div className={style.countdown}>{countdown}</div>}
             <canvas
               ref={canvasRef}
-              width={1920}
-              height={1080}
               className={
                 showCanvas ? style.canvas : `${style.canvas} ${style.hidden}`
               }
