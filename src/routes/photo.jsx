@@ -1,9 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { getTheme } from "../constants/themeConfig";
 
 import style from "../styles/photo.module.scss";
-import { useLocation } from "react-router-dom";
+
 import html2canvas from "html2canvas";
 import { RiCameraLine } from "react-icons/ri";
 import FourCutTheme from "../components/theme/fourCut-theme";
@@ -18,7 +18,7 @@ export function loader({ params }) {
 }
 
 const Photo = () => {
-  const location = useLocation();
+  const navigate = useNavigate();
   const { theme } = useLoaderData();
   const [imageSrc, setImageSrc] = useState("");
   const videoRef = useRef(null);
