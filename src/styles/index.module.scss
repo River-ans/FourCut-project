@@ -51,3 +51,18 @@
     }
  
 }
+
+
+@media (max-height: 750px) {
+
+    .imgContainer{
+        gap: 5px;
+        padding: 5px;
+        width: 150px;
+    }
+
+    .imgContent{
+        height: 75px;
+    }
+
+}
