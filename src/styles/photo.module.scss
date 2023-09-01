@@ -20,11 +20,14 @@
     width: 70px;
     height: 70px;
     border-radius: 999px;
+    border: 1px solid pink;
+    color: pink;
+    background-color: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 20px;
-    box-shadow:  0px 0px 70px #bebebe4b;
+
     opacity: 0.8;
     transition: 0.1s ;        
 }
@@ -35,7 +38,15 @@
 .photoBtn:active{
     opacity: 0.5;
 }
+.photoBtn:disabled {
+    border: 1px solid grey;
+    color: grey;
+    cursor: not-allowed;
+  }
 
+  .photoBtn:disabled:hover{
+    opacity: 0.8;
+  }
 .videoBox{
     position: relative;
     display: flex;
@@ -84,27 +95,33 @@
 
 }
 .canvas{
-    background-color: rgba(0, 0, 0, 0.346);
-    width: 100%;  /* 부모 컨테이너에 꽉 차게 설정 */
-    height: 100%;
-   position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-    display: block;
+  
+//     width: 100%;  /* 부모 컨테이너에 꽉 차게 설정 */
+//     height: 100%;
+//    position: absolute;
+//     top: 50%;
+//     left: 50%;
+//     transform: translate(-50%, -50%);
+    display: none;
 
 }
 .hidden{
     display: none;
 }
 
+.imgBox{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
 
 
 .currentShot{
     font-size: 25px;
     margin-bottom: 20px;
-    font-family: 800;
+
 }
 
 .btn{
